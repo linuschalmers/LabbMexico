@@ -11,6 +11,8 @@ import static java.lang.System.*;
  */
 public class Mexico {
 
+
+
     public static void main(String[] args) {
         new Mexico().program();
     }
@@ -23,6 +25,8 @@ public class Mexico {
 
     void program() {
         //test();            // <----------------- UNCOMMENT to test
+
+        out.println("hej");
 
         int pot = 0;         // What the winner will get
         Player[] players;    // The players (array of Player objects)
