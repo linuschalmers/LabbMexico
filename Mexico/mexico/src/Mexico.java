@@ -26,7 +26,6 @@ public class Mexico {
     void program() {
         //test();            // <----------------- UNCOMMENT to test
 
-        out.println("hej");
 
         int pot = 0;         // What the winner will get
         Player[] players;    // The players (array of Player objects)
@@ -40,7 +39,7 @@ public class Mexico {
         out.println("Mexico Game Started");
         statusMsg(players);
 
-       // while (players.length > 1) {   // Game over when only one player left
+       //while (players.length > 1) {   // Game over when only one player left
 
             // ----- In ----------
             String cmd = getPlayerChoice(current);
@@ -76,6 +75,15 @@ public class Mexico {
 
     // TODO implement and test methods (one at the time)
 
+    int largestCombo(Player p){
+        int maxDiceCombo = 0;
+        if (p.fstDice >= p.secDice) {
+            maxDiceCombo = (p.fstDice * 10) + p.secDice;
+        }else{
+            maxDiceCombo = (p.secDice * 10) + p.fstDice;
+        }
+        return maxDiceCombo;
+    }
 
     int indexOf(Player[] players, Player player) {
         for (int i = 0; i < players.length; i++) {
@@ -98,13 +106,13 @@ public class Mexico {
         // be cleaned up.
         Player[] players = new Player[3];
         Player p1 = new Player();
-        p1.name = "Olle";
+        p1.name = "Loffe";
         p1.amount = startAmount;
         Player p2 = new Player();
-        p2.name = "Fia";
+        p2.name = "Boken";
         p2.amount = startAmount;
         Player p3 = new Player();
-        p3.name = "Lisa";
+        p3.name = "Linux";
         p3.amount = startAmount;
         players[0] = p1;
         players[1] = p2;
@@ -140,7 +148,7 @@ public class Mexico {
     class Player {
         String name;
         int amount;   // Start amount (money)
-        int fstDice;  // Result of first dice
+        static int fstDice;  // Result of first dice
         int secDice;  // Result of second dice
         int nRolls;   // Current number of rolls
     }
@@ -156,13 +164,13 @@ public class Mexico {
     void test() {
         // A few hard coded player to use for test
         // NOTE: Possible to debug tests from here, very efficient!
-        Player[] ps = {new Player(), new Player(), new Player()};
-        ps[0].fstDice = 2;
-        ps[0].secDice = 6;
-        ps[1].fstDice = 6;
-        ps[1].secDice = 5;
-        ps[2].fstDice = 1;
-        ps[2].secDice = 1;
+        //Player[] ps = {new Player(), new Player(), new Player()};
+        //ps[0].fstDice = 2;
+        //ps[0].secDice = 6;
+        //ps[1].fstDice = 6;
+        //ps[1].secDice = 5;
+        //ps[2].fstDice = 1;
+        //ps[2].secDice = 1;
 
         //out.println(getScore(ps[0]) == 62);
         //out.println(getScore(ps[1]) == 65);
