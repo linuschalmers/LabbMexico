@@ -98,13 +98,13 @@ public class Mexico {
         // be cleaned up.
         Player[] players = new Player[3];
         Player p1 = new Player();
-        p1.name = "Olle";
+        p1.name = "Loffe";
         p1.amount = startAmount;
         Player p2 = new Player();
-        p2.name = "Fia";
+        p2.name = "Boken";
         p2.amount = startAmount;
         Player p3 = new Player();
-        p3.name = "Lisa";
+        p3.name = "Linux";
         p3.amount = startAmount;
         players[0] = p1;
         players[1] = p2;
