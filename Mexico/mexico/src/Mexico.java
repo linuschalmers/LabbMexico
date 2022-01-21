@@ -53,7 +53,8 @@ public class Mexico {
                     roundMsg(current);
 
             } else if ("n".equals(cmd)) {
-                current = next(players, current);
+
+                   current = next(players, current);
             } else {
                 out.println("?");
             }
@@ -77,9 +78,11 @@ public class Mexico {
     // TODO implement and test methods (one at the time)
 
     // Generates the biggest combo out of two variables
+
+    //Compares the two dices and combines them in the largest order
     int largestCombo(Player p){
-        int maxDiceCombo = 0;
-        if (p.fstDice >= p.secDice) {
+        int maxDiceCombo;
+        if (p.fstDice > p.secDice) {
             maxDiceCombo = (p.fstDice * 10) + p.secDice;
         }else{
             maxDiceCombo = (p.secDice * 10) + p.fstDice;
@@ -93,8 +96,16 @@ public class Mexico {
         return diceNumber;
     }
 
+
+
+
+
+
+    // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
+
     Player next(Player[] players, Player p){
-        Player nextP = players [((indexOf(players, p))+1)% players.length];
+
+        Player nextP = players [((indexOf(players, p)) + 1) % players.length];
         return nextP;
     }
 
