@@ -21,7 +21,7 @@ public class Mexico {
     final Scanner sc = new Scanner(in);
     final int maxRolls = 3;      // No player may exceed this
     final int startAmount = 3;   // Money for a player. Select any
-    final int mexico = 1000;     // A value greater than any other
+    //final int mexico = 1000;     // A value greater than any other
 
     void program() {
         //test();            // <----------------- UNCOMMENT to test
@@ -52,7 +52,7 @@ public class Mexico {
                     roundMsg(current);
 
             } else if ("n".equals(cmd)) {
-                 // Process
+
             } else {
                 out.println("?");
             }
@@ -84,6 +84,12 @@ public class Mexico {
         }
         return maxDiceCombo;
     }
+
+    int rollDice(){
+        int diceNumber = rand.nextInt(6-1) + 1;
+        return diceNumber;
+    }
+
 
     int indexOf(Player[] players, Player player) {
         for (int i = 0; i < players.length; i++) {
