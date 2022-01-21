@@ -46,13 +46,14 @@ public class Mexico {
             if ("r".equals(cmd)) {
 
                     // --- Process ------
-
+                current.fstDice=rollDice(current);
+                current.secDice=rollDice(current);
 
                     // ---- Out --------
                     roundMsg(current);
 
             } else if ("n".equals(cmd)) {
-
+                current = next(players, current);
             } else {
                 out.println("?");
             }
@@ -75,6 +76,7 @@ public class Mexico {
 
     // TODO implement and test methods (one at the time)
 
+    // Generates the biggest combo out of two variables
     int largestCombo(Player p){
         int maxDiceCombo = 0;
         if (p.fstDice >= p.secDice) {
@@ -85,11 +87,16 @@ public class Mexico {
         return maxDiceCombo;
     }
 
-    int rollDice(){
-        int diceNumber = rand.nextInt(6-1) + 1;
+    // rolls the dice
+    int rollDice(Player p){
+        int diceNumber = rand.nextInt(5) + 1;
         return diceNumber;
     }
 
+    Player next(Player[] players, Player p){
+        Player nextP = players [((indexOf(players, p))+1)% players.length];
+        return nextP;
+    }
 
     int indexOf(Player[] players, Player player) {
         for (int i = 0; i < players.length; i++) {
@@ -154,7 +161,7 @@ public class Mexico {
     class Player {
         String name;
         int amount;   // Start amount (money)
-        static int fstDice;  // Result of first dice
+        int fstDice;  // Result of first dice
         int secDice;  // Result of second dice
         int nRolls;   // Current number of rolls
     }
