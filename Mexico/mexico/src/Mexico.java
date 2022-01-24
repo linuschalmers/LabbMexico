@@ -22,7 +22,7 @@ public class Mexico {
     final Scanner sc = new Scanner(in);
     final int maxRolls = 3;      // No player may exceed this
     final int startAmount = 3;   // Money for a player. Select any
-    //final int mexico = 1000;     // A value greater than any other
+    final int mexico = 1000;     // A value greater than any other
 
     void program() {
         //test();            // <----------------- UNCOMMENT to test
@@ -64,7 +64,7 @@ public class Mexico {
                 // --- Process -----
 
                 // ----- Out --------------------
-                out.println("Round done ... lost!");
+                out.println("Round done " + getLoser(players) + " lost!");
                 out.println("Next to roll is " + current.name);
 
                 statusMsg(players);
@@ -97,7 +97,30 @@ public class Mexico {
         return diceNumber;
     }
 
+    int setScore(Player p){
+        int h=0;
+        if (largestCombo(p) == 21){
+            p.score=mexico;
+        }
+        else if (p.fstDice==p.secDice){
+            p.score=largestCombo(p)*10;
+        }
+        else{
+            p.score = largestCombo(p);
+        }
+        h=p.score;
+        return h;
+    }
 
+    Player getLoser(Player[] players){
+        int min=0;
+        for (int i = 0 ; i < players.length-1; i++){
+            if (players[min].score<players[i+1].score){
+                min = i;
+            }
+        }
+        return players[min];
+    }
 
 
 
@@ -105,7 +128,6 @@ public class Mexico {
     // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
 
     Player next(Player[] players, Player p){
-
         Player nextP = players [((indexOf(players, p)) + 1) % players.length];
         return nextP;
     }
@@ -176,6 +198,7 @@ public class Mexico {
         int fstDice;  // Result of first dice
         int secDice;  // Result of second dice
         int nRolls;   // Current number of rolls
+        int score;
     }
 
     /**************************************************
@@ -186,7 +209,7 @@ public class Mexico {
      *  No testing of IO methods
      *  Uncomment in program() to run test (only)
      ***************************************************/
-    void test() {
+    //void test() {
         // A few hard coded player to use for test
         // NOTE: Possible to debug tests from here, very efficient!
         //Player[] ps = {new Player(), new Player(), new Player()};
@@ -197,13 +220,11 @@ public class Mexico {
         //ps[2].fstDice = 1;
         //ps[2].secDice = 1;
 
-        //out.println(getScore(ps[0]) == 62);
-        //out.println(getScore(ps[1]) == 65);
+        //out.println(setScore(ps[0]) == 62);
+        //out.println(setScore(ps[1]) == 65);
         //out.println(next(ps, ps[0]) == ps[1]);
         //out.println(getLoser(ps) == ps[0]);
 
-        exit(0);
-    }
-
-
+        //exit(0);
+    //}
 }
