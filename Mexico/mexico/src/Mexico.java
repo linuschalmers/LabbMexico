@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import static java.lang.System.*;
 
+
 /*
  *  The Mexico dice game
  *  See https://en.wikipedia.org/wiki/Mexico_(game)
- *
+ * Albin är inte bra på mexico
  */
 public class Mexico {
 
