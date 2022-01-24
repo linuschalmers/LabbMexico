@@ -21,7 +21,7 @@ public class Mexico {
     final Scanner sc = new Scanner(in);
     final int maxRolls = 3;      // No player may exceed this
     final int startAmount = 3;   // Money for a player. Select any
-    //final int mexico = 1000;     // A value greater than any other
+    final int mexico = 1000;     // A value greater than any other
 
     void program() {
         //test();            // <----------------- UNCOMMENT to test
@@ -46,8 +46,16 @@ public class Mexico {
             if ("r".equals(cmd)) {
 
                     // --- Process ------
-                current.fstDice=rollDice(current);
-                current.secDice=rollDice(current);
+                if(current.nRolls < maxRolls){
+                    current.fstDice=rollDice(current);
+                    current.secDice=rollDice(current);
+
+                    setScore(current);
+                }
+                else{
+                    current = next(players, current);
+                }
+
 
                     // ---- Out --------
                     roundMsg(current);
@@ -77,7 +85,11 @@ public class Mexico {
 
     // TODO implement and test methods (one at the time)
 
-    // Generates the biggest combo out of two variables
+    // rolls the dice
+    int rollDice(Player p){
+        int diceNumber = rand.nextInt(5) + 1;
+        return diceNumber;
+    }
 
     //Compares the two dices and combines them in the largest order
     int largestCombo(Player p){
@@ -90,15 +102,35 @@ public class Mexico {
         return maxDiceCombo;
     }
 
-    // rolls the dice
-    int rollDice(Player p){
-        int diceNumber = rand.nextInt(5) + 1;
-        return diceNumber;
+
+    void setScore(Player p){
+        if(largestCombo(p) == 21){
+            p.score = mexico;
+        }
+        else if (p.fstDice == p.secDice){
+            p.score = largestCombo(p) * 10;
+        }
+        else{
+            p.score = largestCombo(p);
+        }
     }
 
 
+    Player getLoser(Player[] players, Player current){
+        Player Loser = current;
+        int min = current.score;
+        for(int i = 0; i < players.length; i++){
+            if (players[i].score < min){
+               min = players[i].score ;
+               Loser = players[i] ;
+            }
+        }
+        return Loser;
+    }
 
+    void clearRoundResults(){
 
+    }
 
 
     // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
@@ -121,6 +153,20 @@ public class Mexico {
     Player getRandomPlayer(Player[] players) {
         return players[rand.nextInt(players.length)];
     }
+
+
+    Player [] removeLoser(Player[] players, Player loser){
+        Player[] remainingPlayers = new Player[players.length - 1];
+        int räknare = 0;
+        for(Player p : players){
+            if(p != loser){
+                remainingPlayers[räknare++] = p;
+            }
+        }
+
+        return remainingPlayers;
+    }
+
 
 
     // ---------- IO methods (nothing to do here) -----------------------
@@ -175,6 +221,7 @@ public class Mexico {
         int fstDice;  // Result of first dice
         int secDice;  // Result of second dice
         int nRolls;   // Current number of rolls
+        int score;    // The players score
     }
 
     /**************************************************
@@ -188,13 +235,13 @@ public class Mexico {
     void test() {
         // A few hard coded player to use for test
         // NOTE: Possible to debug tests from here, very efficient!
-        //Player[] ps = {new Player(), new Player(), new Player()};
-        //ps[0].fstDice = 2;
-        //ps[0].secDice = 6;
-        //ps[1].fstDice = 6;
-        //ps[1].secDice = 5;
-        //ps[2].fstDice = 1;
-        //ps[2].secDice = 1;
+        Player[] ps = {new Player(), new Player(), new Player()};
+        ps[0].fstDice = 2;
+        ps[0].secDice = 6;
+        ps[1].fstDice = 6;
+        ps[1].secDice = 5;
+        ps[2].fstDice = 1;
+        ps[2].secDice = 1;
 
         //out.println(getScore(ps[0]) == 62);
         //out.println(getScore(ps[1]) == 65);
@@ -203,6 +250,4 @@ public class Mexico {
 
         exit(0);
     }
-
-
 }
