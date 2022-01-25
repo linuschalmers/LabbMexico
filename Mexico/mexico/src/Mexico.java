@@ -40,44 +40,43 @@ public class Mexico {
         out.println("Mexico Game Started");
         statusMsg(players);
 
-       //while (players.length > 1) {   // Game over when only one player left
+       while (players.length > 1) {   // Game over when only one player left
 
-            // ----- In ----------
-            String cmd = getPlayerChoice(current);
-            if ("r".equals(cmd)) {
+           // ----- In ----------
+           String cmd = getPlayerChoice(current);
+           if ("r".equals(cmd)) {
 
-                    // --- Process ------
-                if(current.nRolls < maxRolls){
-                    current.fstDice=rollDice(current);
-                    current.secDice=rollDice(current);
-
-                    setScore(current);
-                }
-                else{
-                    current = next(players, current);
-                }
-
-
-                    // ---- Out --------
-                    roundMsg(current);
-
-            } else if ("n".equals(cmd)) {
-
+               // --- Process ------
+               if (current.nRolls < maxRolls) {
+                   current.fstDice = rollDice(current);
+                   current.secDice = rollDice(current);
+                   current.nRolls++;
+               } else {
+                   out.println("End of your turn");
                    current = next(players, current);
-            } else {
-                out.println("?");
-            }
+               }
 
-            //if ( round finished) {
+               // ---- Out --------
+               roundMsg(current);
+               out.println("Value of the roll is " + largestCombo(current));
+
+           } else if ("n".equals(cmd)) {
+               current = next(players, current);
+           } else {
+               out.println("?");
+           }
+
+           if (allRolled(players)) {
                 // --- Process -----
-
+                    out.println("hej");
                 // ----- Out --------------------
-                //out.println("Round done " + getLoser(players) + " lost!");
+                out.println("Round done " + getLoser(players, current) + " lost!");
+                removeLoser(players, current);
                 out.println("Next to roll is " + current.name);
 
                 statusMsg(players);
-            //}
-        //}
+            }
+        }
         out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
     }
 
@@ -134,6 +133,20 @@ public class Mexico {
 
     }
 
+    boolean allRolled(Player[] players){
+        boolean answer = false;
+
+        for (Player p : players){  //ändra players till remainingplayers?
+            if(p.score == 0){
+                answer = false;
+            }
+            else{
+                answer = true;
+            }
+        }
+        return answer;
+    }
+
 
     // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
 
@@ -164,9 +177,10 @@ public class Mexico {
                 remainingPlayers[räknare++] = p;
             }
         }
-
         return remainingPlayers;
     }
+
+
 
 
 
@@ -203,7 +217,7 @@ public class Mexico {
         int amount;   // Start amount (money)
         int fstDice;  // Result of first dice
         int secDice;  // Result of second dice
-        int nRolls;   // Current number of rolls
+        int nRolls = 1;   // Current number of rolls
         int score;    // The players score
 
         Player ( String name1, int amount1){
