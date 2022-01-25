@@ -172,24 +172,6 @@ public class Mexico {
 
     // ---------- IO methods (nothing to do here) -----------------------
 
-    Player[] getPlayers() {
-        // Ugly for now. If using a constructor this may
-        // be cleaned up.
-        Player[] players = new Player[3];
-        Player p1 = new Player();
-        p1.name = "Loffe";
-        p1.amount = startAmount;
-        Player p2 = new Player();
-        p2.name = "Boken";
-        p2.amount = startAmount;
-        Player p3 = new Player();
-        p3.name = "Linux";
-        p3.amount = startAmount;
-        players[0] = p1;
-        players[1] = p2;
-        players[2] = p3;
-        return players;
-    }
 
     void statusMsg(Player[] players) {
         out.print("Status: ");
@@ -224,8 +206,42 @@ public class Mexico {
         int nRolls;   // Current number of rolls
         int score;    // The players score
 
-
+        Player ( String name1, int amount1){
+            name = name1;
+            amount = amount1;
+        }
     }
+
+    Player[] getPlayers(){
+        Player[] players = new Player[3];
+        Player p1 = new Player("Loffe", startAmount);
+        Player p2 = new Player("Boken", startAmount);
+        Player p3 = new Player("Linux", startAmount);
+        players[0] = p1;
+        players[1] = p2;
+        players[2] = p3;
+        return players;
+    }
+
+    /*Player[] getPlayers() {
+        // Ugly for now. If using a constructor this may
+        // be cleaned up.
+        Player[] players = new Player[3];
+
+        Player p1 = new Player();
+        p1.name = "Loffe";
+        p1.amount = startAmount;
+        Player p2 = new Player();
+        p2.name = "Boken";
+        p2.amount = startAmount;
+        Player p3 = new Player();
+        p3.name = "Linux";
+        p3.amount = startAmount;
+        players[0] = p1;
+        players[1] = p2;
+        players[2] = p3;
+        return players;
+    }*/
 
     /**************************************************
      *  Testing
