@@ -4,10 +4,11 @@ import java.util.Scanner;
 
 import static java.lang.System.*;
 
+
 /*
  *  The Mexico dice game
  *  See https://en.wikipedia.org/wiki/Mexico_(game)
- *
+ * Albin är inte bra på mexico
  */
 public class Mexico {
 
@@ -71,7 +72,7 @@ public class Mexico {
                 // --- Process -----
 
                 // ----- Out --------------------
-                out.println("Round done ... lost!");
+                //out.println("Round done " + getLoser(players) + " lost!");
                 out.println("Next to roll is " + current.name);
 
                 statusMsg(players);
@@ -126,6 +127,7 @@ public class Mexico {
             }
         }
         return Loser;
+
     }
 
     void clearRoundResults(){
@@ -136,7 +138,6 @@ public class Mexico {
     // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
 
     Player next(Player[] players, Player p){
-
         Player nextP = players [((indexOf(players, p)) + 1) % players.length];
         return nextP;
     }
@@ -222,6 +223,8 @@ public class Mexico {
         int secDice;  // Result of second dice
         int nRolls;   // Current number of rolls
         int score;    // The players score
+
+
     }
 
     /**************************************************
@@ -232,22 +235,23 @@ public class Mexico {
      *  No testing of IO methods
      *  Uncomment in program() to run test (only)
      ***************************************************/
-    void test() {
+    //void test() {
         // A few hard coded player to use for test
         // NOTE: Possible to debug tests from here, very efficient!
         Player[] ps = {new Player(), new Player(), new Player()};
-        ps[0].fstDice = 2;
-        ps[0].secDice = 6;
-        ps[1].fstDice = 6;
-        ps[1].secDice = 5;
-        ps[2].fstDice = 1;
-        ps[2].secDice = 1;
+        //ps[0].fstDice = 2;
+        //ps[0].secDice = 6;
+        //ps[1].fstDice = 6;
+        //ps[1].secDice = 5;
+        //ps[2].fstDice = 1;
+        //ps[2].secDice = 1;
 
-        //out.println(getScore(ps[0]) == 62);
-        //out.println(getScore(ps[1]) == 65);
+        //out.println(setScore(ps[0]) == 62);
+        //out.println(setScore(ps[1]) == 65);
         //out.println(next(ps, ps[0]) == ps[1]);
         //out.println(getLoser(ps) == ps[0]);
 
-        exit(0);
+
     }
-}
+
+
