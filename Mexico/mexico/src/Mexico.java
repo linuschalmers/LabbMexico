@@ -254,7 +254,7 @@ public class Mexico {
     //void test() {
         // A few hard coded player to use for test
         // NOTE: Possible to debug tests from here, very efficient!
-        Player[] ps = {new Player(), new Player(), new Player()};
+        //Player[] ps = {new Player(), new Player(), new Player()};
         //ps[0].fstDice = 2;
         //ps[0].secDice = 6;
         //ps[1].fstDice = 6;
