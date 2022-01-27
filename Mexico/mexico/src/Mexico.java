@@ -26,7 +26,7 @@ public class Mexico {
     void program() {
         //test();            // <----------------- UNCOMMENT to test
 
-
+        int currentMaxRolls = maxRolls;
         int pot = 0;         // What the winner will get
         Player[] players;    // The players (array of Player objects)
         Player current;      // Current player for round
@@ -40,114 +40,115 @@ public class Mexico {
         statusMsg(players);
 
         while (players.length > 1) {   // Game over when only one player left
-
-            // ----- In ----------
             String cmd = getPlayerChoice(current);
 
-
             if ("r".equals(cmd)) {
-
-                // --- Process ------
-                if (current.nRolls < maxRolls) {
+                if (current.nRolls < currentMaxRolls) {
+                    current.nRolls++;
                     current.fstDice = rollDice(current);
                     current.secDice = rollDice(current);
-                    current.nRolls++;
-                } else if(1 == 0){
+                    setScore(current);
+                    roundMsg(current);
+                    out.println("Value of the roll is " + largestCombo(current));
+
+                } else {
+                    out.println(current.name + "dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
 
                     current = next(players, current);
                 }
-                else{
-                    out.println("End of your turn");
-                }
-
-                // ---- Out --------
-                roundMsg(current);
-                out.println("Value of the roll is " + largestCombo(current));
-
             } else if ("n".equals(cmd)) {
+
+                if (allRolled(players) == 1) {
+                    currentMaxRolls = current.nRolls;
+                }
                 current = next(players, current);
+                out.println("Next to roll is " + current.name);
             } else {
                 out.println("?");
             }
-        }
 
-        if(allRolled(players)) {
-            // --- Process -----
-            out.println("hej");
-            // ----- Out --------------------
-            out.println("Round done " + getLoser(players, current) + " lost!");
-            removeLoser(players, current);
-            out.println("Next to roll is " + current.name);
-        }
-        statusMsg(players);
-        out.println("Game Over, winner is "+players[0].name +". Will get "+pot +" from pot");
+            if (allRolled(players) == 3) {
+                out.println("Round done " + getLoser(players, current) + " lost!");
+                removeLoser(players, current);
+                clearRoundResults(players);
+                out.println("Next to roll is " + current.name);
+                currentMaxRolls = maxRolls;
+                statusMsg(players);
+                System.out.flush();
 
+            }
+        }
+        out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
     }
 
 
+    // ---- Game logic methods --------------
 
-        // ---- Game logic methods --------------
+    // TODO implement and test methods (one at the time)
 
-        // TODO implement and test methods (one at the time)
+    // rolls the dice
+    int rollDice(Player p) {
+        int diceNumber = rand.nextInt(5) + 1;
+        return diceNumber;
+    }
 
-        // rolls the dice
-        int rollDice (Player p){
-            int diceNumber = rand.nextInt(5) + 1;
-            return diceNumber;
+    //Compares the two dices and combines them in the largest order
+    int largestCombo(Player p) {
+        int maxDiceCombo;
+        if (p.fstDice > p.secDice) {
+            maxDiceCombo = (p.fstDice * 10) + p.secDice;
+        } else {
+            maxDiceCombo = (p.secDice * 10) + p.fstDice;
         }
+        return maxDiceCombo;
+    }
 
-        //Compares the two dices and combines them in the largest order
-        int largestCombo (Player p){
-            int maxDiceCombo;
-            if (p.fstDice > p.secDice) {
-                maxDiceCombo = (p.fstDice * 10) + p.secDice;
-            } else {
-                maxDiceCombo = (p.secDice * 10) + p.fstDice;
+
+    void setScore(Player p) {
+        if (largestCombo(p) == 21) {
+            p.score = mexico;
+        } else if (p.fstDice == p.secDice) {
+            p.score = largestCombo(p) * 10;
+        } else {
+            p.score = largestCombo(p);
+        }
+    }
+
+
+    Player getLoser(Player[] players, Player current) {
+        Player Loser = current;
+        int min = current.score;
+        for (int i = 0; i < players.length; i++) {
+            if (players[i].score < min) {
+                min = players[i].score;
+                Loser = players[i];
             }
-            return maxDiceCombo;
+
         }
+        return Loser;
+    }
 
 
-        void setScore (Player p){
-            if (largestCombo(p) == 21) {
-                p.score = mexico;
-            } else if (p.fstDice == p.secDice) {
-                p.score = largestCombo(p) * 10;
-            } else {
-                p.score = largestCombo(p);
+    void clearRoundResults(Player[] players){
+        for (Player p : players) {
+            p.score = 0;
+            p.nRolls = 0;
+            p.fstDice = 0;
+            p.secDice = 0;
+        }
+    }
+
+    int allRolled(Player[] players) {
+        int antal = 0;
+        for (Player p : players) {
+            if (p.nRolls > 0) {
+                antal++;
+
             }
         }
+        return Loser;
+    }
 
-
-        Player getLoser (Player[]players, Player current){
-            Player Loser = current;
-            int min = current.score;
-            for (int i = 0; i < players.length; i++) {
-                if (players[i].score < min) {
-                    min = players[i].score;
-                    Loser = players[i];
-                }
-            }
-            return Loser;
-
-        }
-
-        void clearRoundResults () {
-
-        }
-
-        boolean allRolled (Player[] players){
-            boolean answer = false;
-
-            for (Player p : players) {  //ändra players till remainingplayers?
-                if (p.score == 0) {
-                    answer = false;
-                } else {
-                    answer = true;
-                }
-            }
-            return answer;
-        }
 
 
         // ALLT SOM HAR MED PLAYERS SKRIVS UNDER DEHÄR
@@ -165,6 +166,7 @@ public class Mexico {
             }
             return -1;
         }
+
 
         Player getRandomPlayer (Player[]players){
             return players[rand.nextInt(players.length)];
@@ -194,94 +196,76 @@ public class Mexico {
             out.println();
         }
 
-        void roundMsg (Player current){
-            out.println(current.name + " got " +
-                    current.fstDice + " and " + current.secDice);
-        }
-
-        String getPlayerChoice (Player player){
-            out.print("Player is " + player.name + " > ");
-            return sc.nextLine();
-        }
-
-        // Possibly useful utility during development
-        String toString (Player p){
-            return p.name + ", " + p.amount + ", " + p.fstDice + ", "
-                    + p.secDice + ", " + p.nRolls;
-        }
-
-        // Class for a player
-        class Player {
-            String name;
-            int amount;   // Start amount (money)
-            int fstDice;  // Result of first dice
-            int secDice;  // Result of second dice
-            int nRolls = 1;   // Current number of rolls
-            int score;    // The players score
-
-            Player(String name1, int amount1) {
-                name = name1;
-                amount = amount1;
+            void roundMsg (Player current){
+                out.println(current.name + " got " + current.fstDice + " and " + current.secDice);
             }
+
+            String getPlayerChoice (Player player){
+                out.print("\n" + "Does " + player.name + " want to roll? > ");
+                return sc.nextLine();
+            }
+
+
+            // Possibly useful utility during development
+            String toString (Player p){
+                return p.name + ", " + p.amount + ", " + p.fstDice + ", "
+                        + p.secDice + ", " + p.nRolls;
+            }
+
+
+            // Class for a player
+            class Player {
+                String name;
+                int amount;   // Start amount (money)
+                int fstDice;  // Result of first dice
+                int secDice;  // Result of second dice
+                int nRolls = 1;   // Current number of rolls
+                int score;    // The players score
+
+                Player(String name1, int amount1) {
+                    name = name1;
+                    amount = amount1;
+                }
+            }
+
+            Player[] getPlayers () {
+                Player[] players = new Player[3];
+                Player p1 = new Player("Loffe", startAmount);
+                Player p2 = new Player("Boken", startAmount);
+                Player p3 = new Player("Linux", startAmount);
+                players[0] = p1;
+                players[1] = p2;
+                players[2] = p3;
+                return players;
+            }
+
+
+                /**************************************************
+                 *  Testing
+                 *
+                 *  Test are logical expressions that should
+                 *  evaluate to true (and then be written out)
+                 *  No testing of IO methods
+                 *  Uncomment in program() to run test (only)
+                 ***************************************************/
+                //void test() {
+                // A few hard coded player to use for test
+                // NOTE: Possible to debug tests from here, very efficient!
+                //Player[] ps = {new Player(), new Player(), new Player()};
+                //ps[0].fstDice = 2;
+                //ps[0].secDice = 6;
+                //ps[1].fstDice = 6;
+                //ps[1].secDice = 5;
+                //ps[2].fstDice = 1;
+                //ps[2].secDice = 1;
+
+                //out.println(setScore(ps[0]) == 62);
+                //out.println(setScore(ps[1]) == 65);
+                //out.println(next(ps, ps[0]) == ps[1]);
+                //out.println(getLoser(ps) == ps[0]);
+
+
+
         }
-
-        Player[] getPlayers () {
-            Player[] players = new Player[3];
-            Player p1 = new Player("Loffe", startAmount);
-            Player p2 = new Player("Boken", startAmount);
-            Player p3 = new Player("Linux", startAmount);
-            players[0] = p1;
-            players[1] = p2;
-            players[2] = p3;
-            return players;
-        }
-
-
-    /*Player[] getPlayers() {
-        // Ugly for now. If using a constructor this may
-        // be cleaned up.
-        Player[] players = new Player[3];
-
-        Player p1 = new Player();
-        p1.name = "Loffe";
-        p1.amount = startAmount;
-        Player p2 = new Player();
-        p2.name = "Boken";
-        p2.amount = startAmount;
-        Player p3 = new Player();
-        p3.name = "Linux";
-        p3.amount = startAmount;
-        players[0] = p1;
-        players[1] = p2;
-        players[2] = p3;
-        return players;
-    }*/
-
-        /**************************************************
-         *  Testing
-         *
-         *  Test are logical expressions that should
-         *  evaluate to true (and then be written out)
-         *  No testing of IO methods
-         *  Uncomment in program() to run test (only)
-         ***************************************************/
-        //void test() {
-        // A few hard coded player to use for test
-        // NOTE: Possible to debug tests from here, very efficient!
-        //Player[] ps = {new Player(), new Player(), new Player()};
-        //ps[0].fstDice = 2;
-        //ps[0].secDice = 6;
-        //ps[1].fstDice = 6;
-        //ps[1].secDice = 5;
-        //ps[2].fstDice = 1;
-        //ps[2].secDice = 1;
-
-        //out.println(setScore(ps[0]) == 62);
-        //out.println(setScore(ps[1]) == 65);
-        //out.println(next(ps, ps[0]) == ps[1]);
-        //out.println(getLoser(ps) == ps[0]);
-
-
-    }
 
 
