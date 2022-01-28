@@ -72,15 +72,15 @@ public class Mexico {
             }
 
             if (allRolled(players) == players.length) {
-                out.println("\n" + "Round done " + getLoser(players, current) + " lost!");
+                out.println("\n" + "Round done " + getLoser(players, current, pot) + " lost!");
+                pot++;
                 removeLoser(players, current);
                 clearRoundResults(players);
                 currentMaxRolls = maxRolls;
-                out.println("Next to roll is " + current.name);
                 players=amountEquZero(players);
                 statusMsg(players);
+                current = next(players, current);
                 System.out.flush();
-
             }
         }
         out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
@@ -116,12 +116,8 @@ public class Mexico {
             p.score = largestCombo(p);
         }
     }
-    Player getWinner(Player[] players){
 
-        return players[1];
-    }
-
-    String getLoser(Player[] players, Player current){
+    String getLoser(Player[] players, Player current,int pot){
         Player Loser = current;
         int min = current.score;
         for(int i = 0; i < players.length; i++){
