@@ -21,7 +21,7 @@ public class Mexico {
     final Random rand = new Random();
     final Scanner sc = new Scanner(in);
     final int maxRolls = 3;      // No player may exceed this
-    final int startAmount = 3;   // Money for a player. Select any
+    final int startAmount = 1;   // Money for a player. Select any
     final int mexico = 1000;     // A value greater than any other
 
     void program() {
@@ -51,7 +51,6 @@ public class Mexico {
                     setScore(current);
                     roundMsg(current);
                     out.println("Value of the roll is " + largestCombo(current));
-
                 }
                 else {
                     out.println(current.name + " dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
@@ -61,27 +60,30 @@ public class Mexico {
             }
             else if ("n".equals(cmd)) {
 
-                if (allRolled(players, currentMaxRolls) == 1) {
+                if (allRolled(players) == 1) {
                     currentMaxRolls = current.nRolls;
                 }
-                out.println( current.name + "s score is " + current.score + "."+ "\n" +"Next to roll is " + current.name);
+                out.println( current.name + "s score is " + current.score + "." );
                 current = next(players, current);
+                out.println("Next to roll is " + current.name);
             }
             else {
                 out.println("?");
             }
 
-            if (allRolled(players, currentMaxRolls) == 3) {
+            if (allRolled(players) == players.length) {
                 out.println("\n" + "Round done " + getLoser(players, current) + " lost!");
                 removeLoser(players, current);
-                clearRoundResults(players, currentMaxRolls);
+                clearRoundResults(players);
+                currentMaxRolls = maxRolls;
                 out.println("Next to roll is " + current.name);
+                players=amountEquZero(players);
                 statusMsg(players);
                 System.out.flush();
 
             }
         }
-        out.println("Game Over, winner is " + getWinner(players) + ". Will get " + pot + " from pot");
+        out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
     }
 
     // TODO implement and test methods (one at the time)
@@ -128,24 +130,44 @@ public class Mexico {
                 Loser = players[i] ;
             }
         }
+        Loser.amount--;
         return Loser.name;
     }
 
-    void clearRoundResults(Player[] players, int currentMaxRolls){
+    Player[] amountEquZero(Player[] players){
+        for (int i = 0; i <= players.length-1 ; i++){
+            if(players[i].amount<=0){
+                players=removeLoser(players, players[i]);
+            }
+        }
+        return players;
+    }
+
+    Player [] removeLoser(Player[] players, Player loser){
+        Player[] remainingPlayers = new Player[players.length - 1];
+        int räknare = 0;
+        for(Player p : players){
+            if(p != loser){
+                remainingPlayers[räknare++] = p;
+            }
+        }
+        return remainingPlayers;
+    }
+
+    void clearRoundResults(Player[] players){
         for (Player p : players) {
             p.score = 0;
             p.nRolls = 0;
             p.fstDice = 0;
             p.secDice = 0;
-            currentMaxRolls = maxRolls;
 
         }
     }
 
-    int allRolled(Player[] players, int currentMaxRolls){
+    int allRolled(Player[] players){
         int antal = 0;
         for (Player p:players) {
-            if (p.nRolls>currentMaxRolls){
+            if (p.nRolls>0){
                 antal ++;
             }
         }
@@ -169,18 +191,6 @@ public class Mexico {
 
     Player getRandomPlayer(Player[] players) {
         return players[rand.nextInt(players.length)];
-    }
-
-
-    Player [] removeLoser(Player[] players, Player loser){
-        Player[] remainingPlayers = new Player[players.length - 1];
-        int räknare = 0;
-        for(Player p : players){
-            if(p != loser){
-                remainingPlayers[räknare++] = p;
-            }
-        }
-        return remainingPlayers;
     }
 
     // ---------- IO methods (nothing to do here) -----------------------
