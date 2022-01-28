@@ -54,24 +54,24 @@ public class Mexico {
 
                 }
                 else {
-                    out.println(current.name + "dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
+                    out.println(current.name + " dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
 
                     current = next(players, current);
                 }
             }
             else if ("n".equals(cmd)) {
 
-                if (allRolled(players) == 1) {
+                if (allRolled(players, currentMaxRolls) == 1) {
                     currentMaxRolls = current.nRolls;
                 }
+                out.println( current.name + "s score is " + current.score + "."+ "\n" +"Next to roll is " + current.name);
                 current = next(players, current);
-                out.println("Next to roll is " + current.name);
             }
             else {
                 out.println("?");
             }
 
-            if (allRolled(players) == 3) {
+            if (allRolled(players, currentMaxRolls) == 3) {
                 out.println("\n" + "Round done " + getLoser(players, current) + " lost!");
                 removeLoser(players, current);
                 clearRoundResults(players, currentMaxRolls);
@@ -81,7 +81,7 @@ public class Mexico {
 
             }
         }
-        out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
+        out.println("Game Over, winner is " + getWinner(players) + ". Will get " + pot + " from pot");
     }
 
     // TODO implement and test methods (one at the time)
@@ -114,8 +114,12 @@ public class Mexico {
             p.score = largestCombo(p);
         }
     }
+    Player getWinner(Player[] players){
 
-    Player getLoser(Player[] players, Player current){
+        return players[1];
+    }
+
+    String getLoser(Player[] players, Player current){
         Player Loser = current;
         int min = current.score;
         for(int i = 0; i < players.length; i++){
@@ -124,7 +128,7 @@ public class Mexico {
                 Loser = players[i] ;
             }
         }
-        return Loser;
+        return Loser.name;
     }
 
     void clearRoundResults(Player[] players, int currentMaxRolls){
@@ -138,10 +142,10 @@ public class Mexico {
         }
     }
 
-    int allRolled(Player[] players){
+    int allRolled(Player[] players, int currentMaxRolls){
         int antal = 0;
         for (Player p:players) {
-            if (p.nRolls>0){
+            if (p.nRolls>currentMaxRolls){
                 antal ++;
             }
         }
