@@ -12,8 +12,6 @@ import static java.lang.System.*;
  */
 public class Mexico {
 
-
-
     public static void main(String[] args) {
         new Mexico().program();
     }
@@ -21,7 +19,7 @@ public class Mexico {
     final Random rand = new Random();
     final Scanner sc = new Scanner(in);
     final int maxRolls = 3;      // No player may exceed this
-    final int startAmount = 3;   // Money for a player. Select any
+    final int startAmount = 1;   // Money for a player. Select any
     final int mexico = 1000;     // A value greater than any other
 
     void program() {
@@ -40,48 +38,53 @@ public class Mexico {
         out.println("Mexico Game Started");
         statusMsg(players);
 
-       while (players.length > 1) {   // Game over when only one player left
-           String cmd = getPlayerChoice(current);
+        while (players.length > 1) {   // Game over when only one player left
+            out.println("Next to roll is " + current.name);
 
-           if ("r".equals(cmd)) {
-               if (current.nRolls < currentMaxRolls) {
-                   current.nRolls++;
-                   current.fstDice = rollDice(current);
-                   current.secDice = rollDice(current);
-                   setScore(current);
-                   roundMsg(current);
-                   out.println("Value of the roll is " + largestCombo(current));
+            String cmd = getPlayerChoice(current);
 
-               }
-               else {
-                   out.println(current.name + "dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
+            if ("r".equals(cmd)) {
+                if (current.nRolls < currentMaxRolls) {
+                    current.nRolls++;
+                    current.fstDice = rollDice(current);
+                    current.secDice = rollDice(current);
+                    setScore(current);
+                    roundMsg(current);
+                    out.println("Value of the roll is " + largestCombo(current));
+                }
+                else {
+                    out.println(current.name + " dont have any more rolls available. End of your turn" + "\n" + current.name + "s score is " + current.score + ".");
 
-                   current = next(players, current);
-               }
-           }
-           else if ("n".equals(cmd)) {
+                    current = next(players, current);
+                }
+            }
+            else if ("n".equals(cmd)) {
 
-               if (allRolled(players) == 1) {
-                   currentMaxRolls = current.nRolls;
-               }
-               current = next(players, current);
-               out.println("Next to roll is " + current.name);
-           }
-           else {
-               out.println("?");
-           }
+                if (allRolled(players) == 1) {
+                    currentMaxRolls = current.nRolls;
+                }
+                out.println( current.name + "s score is " + current.score + "." );
+                current = next(players, current);
+            }
+            else {
+                out.println("?");
+            }
+            if(current.nRolls==currentMaxRolls){
 
-           if (allRolled(players) == 3) {
-               out.println("Round done " + getLoser(players, current) + " lost!");
-               removeLoser(players, current);
-               clearRoundResults(players);
-               out.println("Next to roll is " + current.name);
-               currentMaxRolls = maxRolls;
-               statusMsg(players);
-               System.out.flush();
 
-           }
-       }
+                if (allRolled(players) == players.length) {
+                    out.println("\n" + "Round done " + getLoser(players, current, pot) + " lost!");
+                    pot++;
+                    removeLoser(players, current);
+                    clearRoundResults(players);
+                    currentMaxRolls = maxRolls;
+                    players=amountEquZero(players);
+                    statusMsg(players);
+                    current = next(players, current);
+                    System.out.flush();
+                }
+            }
+        }
         out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
     }
 
@@ -116,16 +119,37 @@ public class Mexico {
         }
     }
 
-    Player getLoser(Player[] players, Player current){
+    String getLoser(Player[] players, Player current,int pot){
         Player Loser = current;
         int min = current.score;
         for(int i = 0; i < players.length; i++){
             if (players[i].score < min){
-               min = players[i].score ;
-               Loser = players[i] ;
+                min = players[i].score ;
+                Loser = players[i] ;
             }
         }
-        return Loser;
+        Loser.amount--;
+        return Loser.name;
+    }
+
+    Player[] amountEquZero(Player[] players){
+        for (int i = 0; i <= players.length-1 ; i++){
+            if(players[i].amount<=0){
+                players=removeLoser(players, players[i]);
+            }
+        }
+        return players;
+    }
+
+    Player [] removeLoser(Player[] players, Player loser){
+        Player[] remainingPlayers = new Player[players.length - 1];
+        int räknare = 0;
+        for(Player p : players){
+            if(p != loser){
+                remainingPlayers[räknare++] = p;
+            }
+        }
+        return remainingPlayers;
     }
 
     void clearRoundResults(Player[] players){
@@ -164,18 +188,6 @@ public class Mexico {
 
     Player getRandomPlayer(Player[] players) {
         return players[rand.nextInt(players.length)];
-    }
-
-
-    Player [] removeLoser(Player[] players, Player loser){
-        Player[] remainingPlayers = new Player[players.length - 1];
-        int räknare = 0;
-        for(Player p : players){
-            if(p != loser){
-                remainingPlayers[räknare++] = p;
-            }
-        }
-        return remainingPlayers;
     }
 
     // ---------- IO methods (nothing to do here) -----------------------
@@ -238,22 +250,22 @@ public class Mexico {
      *  Uncomment in program() to run test (only)
      ***************************************************/
     //void test() {
-        // A few hard coded player to use for test
-        // NOTE: Possible to debug tests from here, very efficient!
-        //Player[] ps = {new Player(), new Player(), new Player()};
-        //ps[0].fstDice = 2;
-        //ps[0].secDice = 6;
-        //ps[1].fstDice = 6;
-        //ps[1].secDice = 5;
-        //ps[2].fstDice = 1;
-        //ps[2].secDice = 1;
+    // A few hard coded player to use for test
+    // NOTE: Possible to debug tests from here, very efficient!
+    //Player[] ps = {new Player(), new Player(), new Player()};
+    //ps[0].fstDice = 2;
+    //ps[0].secDice = 6;
+    //ps[1].fstDice = 6;
+    //ps[1].secDice = 5;
+    //ps[2].fstDice = 1;
+    //ps[2].secDice = 1;
 
-        //out.println(setScore(ps[0]) == 62);
-        //out.println(setScore(ps[1]) == 65);
-        //out.println(next(ps, ps[0]) == ps[1]);
-        //out.println(getLoser(ps) == ps[0]);
+    //out.println(setScore(ps[0]) == 62);
+    //out.println(setScore(ps[1]) == 65);
+    //out.println(next(ps, ps[0]) == ps[1]);
+    //out.println(getLoser(ps) == ps[0]);
 
 
-    }
+}
 
 
