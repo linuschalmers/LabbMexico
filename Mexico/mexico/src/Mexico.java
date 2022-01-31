@@ -69,8 +69,6 @@ public class Mexico {
             else {
                 out.println("?");
             }
-            if(current.nRolls==currentMaxRolls){
-
 
             if(current.nRolls == currentMaxRolls){
 
