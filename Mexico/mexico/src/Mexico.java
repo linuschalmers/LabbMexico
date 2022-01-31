@@ -12,8 +12,6 @@ import static java.lang.System.*;
  */
 public class Mexico {
 
-
-
     public static void main(String[] args) {
         new Mexico().program();
     }
@@ -41,6 +39,8 @@ public class Mexico {
         statusMsg(players);
 
         while (players.length > 1) {   // Game over when only one player left
+            out.println("Next to roll is " + current.name);
+
             String cmd = getPlayerChoice(current);
 
             if ("r".equals(cmd)) {
@@ -65,11 +65,12 @@ public class Mexico {
                 }
                 out.println( current.name + "s score is " + current.score + "." );
                 current = next(players, current);
-                out.println("Next to roll is " + current.name);
             }
             else {
                 out.println("?");
             }
+            if(current.nRolls==currentMaxRolls){
+
 
             if (allRolled(players) == players.length) {
                 out.println("\n" + "Round done " + getLoser(players, current, pot) + " lost!");
@@ -81,6 +82,7 @@ public class Mexico {
                 statusMsg(players);
                 current = next(players, current);
                 System.out.flush();
+            }
             }
         }
         out.println("Game Over, winner is " + players[0].name + ". Will get " + pot + " from pot");
@@ -156,7 +158,6 @@ public class Mexico {
             p.nRolls = 0;
             p.fstDice = 0;
             p.secDice = 0;
-
         }
     }
 
