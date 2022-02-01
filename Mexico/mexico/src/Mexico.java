@@ -186,7 +186,7 @@ public class Mexico {
         return -1;
     }
 
-    Player getRandomPlayer(Player[] players) {
+    Player getRandomPlayer(Player[] players) {          //
         return players[rand.nextInt(players.length)];
     }
 
@@ -215,7 +215,7 @@ public class Mexico {
     }
 
     // Class for a player
-    class Player {
+    class Player {                  // konstruktor för spelarna
         String name;
         int amount;   // Start amount (money)
         int fstDice;  // Result of first dice
@@ -230,11 +230,11 @@ public class Mexico {
     }
 
     Player[] getPlayers(){
-        Player[] players = new Player[3];
-        Player p1 = new Player("Loffe", startAmount);
+        Player[] players = new Player[3];                           // skapar lista för spelarna
+        Player p1 = new Player("Loffe", startAmount);        // skapar spelarna
         Player p2 = new Player("Boken", startAmount);
         Player p3 = new Player("Linux", startAmount);
-        players[0] = p1;
+        players[0] = p1;                                            // skapar index för spelarna i listan
         players[1] = p2;
         players[2] = p3;
         return players;
